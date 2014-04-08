@@ -2,27 +2,41 @@ require './piece.rb'
 
 class SlidingPiece < Piece
 
+  DIAG_DELTAS = [
+    [-1, -1],
+    [-1, 1],
+    [1, 1],
+    [1, -1]
+  ]
 
+  HORIZ_DELTAS = [
+    [0, -1],
+    [0, 1],
+    [-1, 0],
+    [1, 0]
+  ]
+
+  def expand_moves(deltas, pos)
+    [].tap do |possible_moves|
+      deltas.each do |delta|
+        pos = [@position[0] + delta[0], @position[1] + delta[1]]
+        while on_board?(pos) && !(@board.occupied?(pos))
+          possible_moves << pos
+          pos = [pos[0] + delta[0], pos[1] + delta[1]]
+        end
+      end
+    end
+  end
 
   def moves
-    possible_moves = []
-
-    if move_dirs(:diagonal)
-      until another piece || !on_board?(pos)
-        possible_moves << pos
-
-
-    if move_dirs(:horizontal)
-      until another piece || !on_board?
-        possible_moves << pos
-    #in your possible directions, expand til another piece blocks you, or end of board
-
-    #if move_dirs diagonal add all [x-1,y+1]
-    #if move_dirs horizontal add all [x, y + n] and [x + n, y]
-
-
-    #return array of move positions?
-    possible_moves
+    [].tap do |all_moves|
+      if move_dirs.include?(:diagonal)
+        all_moves << expand_moves(DIAG_DELTAS, @position)
+      end
+      if move_dirs.include?(:horizontal)
+        all_moves << expand_moves(HORIZ_DELTAS, @position)
+      end
+    end
   end
 end
 

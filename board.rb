@@ -1,4 +1,5 @@
 class Board
+  attr_reader :rows
 
   def initialize
     @rows  = Array.new(8) {Array.new(8)}
@@ -29,5 +30,10 @@ class Board
     @rows[0][5] = Bishop.new([0,5], self, :white)
     @rows[0][6] = Knight.new([0,6], self, :white)
     @rows[0][7] = Rook.new([0,7], self, :white)
+  end
+
+  def occupied?(pos)
+    x,y = pos
+    self.rows[x][y] != nil
   end
 end
