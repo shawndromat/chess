@@ -32,8 +32,12 @@ class Board
     @rows[0][7] = Rook.new([0,7], self, :white)
   end
 
-  def occupied?(pos)
+  def occupant(pos)
     x,y = pos
-    self.rows[x][y] != nil
+    if @rows[x][y].nil?
+      return nil
+    else
+      return @rows[x][y].color
+    end
   end
 end

@@ -16,12 +16,13 @@ class SlidingPiece < Piece
     [1, 0]
   ]
 
-  def expand_moves(deltas, pos)
+  def expand_moves(deltas)
     [].tap do |possible_moves|
       deltas.each do |delta|
         pos = [@position[0] + delta[0], @position[1] + delta[1]]
-        while on_board?(pos) && !(@board.occupied?(pos))
+        while on_board?(pos) && (@board.occupant(pos) != @color)
           possible_moves << pos
+          break if opponent?(pos)
           pos = [pos[0] + delta[0], pos[1] + delta[1]]
         end
       end
