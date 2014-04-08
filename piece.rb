@@ -1,4 +1,6 @@
 class Piece
+  attr_reader :position, :color
+
   def initialize(position, board, color)
     @position = position
     @board = board
@@ -10,8 +12,8 @@ class Piece
   end
 
   def opponent?(pos)
-    return false if @board.row[pos[0]][pos[1]].nil?
-    @color != @board.row[pos[0]][pos[1]].color
+    return false if @board.rows[pos[0]][pos[1]].nil?
+    @color != @board.rows[pos[0]][pos[1]].color
   end
 
   def on_board?(pos)

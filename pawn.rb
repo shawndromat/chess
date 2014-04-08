@@ -41,5 +41,9 @@ class Pawn < Piece
     false
   end
 
+  def get_sprite
+    @color == :black ? "\u265f" : "\u2659"
+  end
+
 
 end

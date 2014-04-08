@@ -32,10 +32,10 @@ class SlidingPiece < Piece
   def moves
     [].tap do |all_moves|
       if move_dirs.include?(:diagonal)
-        all_moves << expand_moves(DIAG_DELTAS, @position)
+        expand_moves(DIAG_DELTAS).each{ |x| all_moves << x }
       end
       if move_dirs.include?(:horizontal)
-        all_moves << expand_moves(HORIZ_DELTAS, @position)
+        expand_moves(HORIZ_DELTAS).each { |x| all_moves << x }
       end
     end
   end
@@ -45,16 +45,28 @@ class Bishop < SlidingPiece
   def move_dirs
     [:diagonal]
   end
+
+  def get_sprite
+    @color == :black ? "\u265D" : "\u2657"
+  end
 end
 
 class Rook < SlidingPiece
   def move_dirs
     [:horizontal]
   end
+
+  def get_sprite
+    @color == :black ? "\u265C" : "\u2656"
+  end
 end
 
 class Queen < SlidingPiece
   def move_dirs
     [:diagonal, :horizontal]
+  end
+
+  def get_sprite
+    @color == :black ? "\u265B" : "\u2655"
   end
 end
