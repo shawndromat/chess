@@ -88,7 +88,6 @@ class Board
   end
 
   def move(start_pos, end_pos)
-    raise "There is no piece on that square." if occupant(start_pos).nil?
     current_piece = self[start_pos]
     raise "Not a valid move!" unless current_piece.valid_moves.include?(end_pos)
     p current_piece.position
@@ -98,7 +97,6 @@ class Board
   end
 
   def test_move(start_pos, end_pos)
-    raise "There is no piece on that square." if occupant(start_pos).nil?
     current_piece = self[start_pos]
     raise "Not a valid move!" unless current_piece.moves.include?(end_pos)
     # p current_piece.position
