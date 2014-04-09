@@ -1,5 +1,6 @@
 require './piece.rb'
 
+
 class SlidingPiece < Piece
 
   DIAG_DELTAS = [
@@ -32,12 +33,16 @@ class SlidingPiece < Piece
   def moves
     [].tap do |all_moves|
       if move_dirs.include?(:diagonal)
-        expand_moves(DIAG_DELTAS).each{ |x| all_moves << x }
+        expand_moves(DIAG_DELTAS).each do
+          |x| all_moves << x # unless move_into_check?(x)
+        end
       end
       if move_dirs.include?(:horizontal)
-        expand_moves(HORIZ_DELTAS).each { |x| all_moves << x }
+        expand_moves(HORIZ_DELTAS).each do
+          |x| all_moves << x # unless move_into_check?(x)
+        end
       end
-    end
+    end.select { |move| !move_into_check?(move)}
   end
 end
 

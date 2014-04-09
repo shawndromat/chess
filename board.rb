@@ -1,10 +1,10 @@
-Dir['./*.rb'].each { |file| require file }
+Dir["./*.rb"].each {|file| require file }
 
 class Board
   attr_reader :rows
 
   def initialize
-    @rows  = Array.new(8) {Array.new(8)}
+    @rows  = Array.new(8) { Array.new(8) }
     set_pieces
   end
 
@@ -22,7 +22,7 @@ class Board
     end
 
     (0..7).each do |index|
-      @rows[6][index] = Pawn.new([1, index], self, :white)
+      @rows[6][index] = Pawn.new([6, index], self, :white)
     end
     @rows[7][0] = Rook.new([7,0], self, :white)
     @rows[7][1] = Knight.new([7,1], self, :white)
@@ -63,22 +63,47 @@ class Board
     false
   end
 
-  def move(start_pos, end_pos)
+  def [](pos)
+    x, y = pos
+    @rows[x][y]
+  end
 
+  def []=(pos, piece)
+    x, y = pos
+    @rows[x][y] = piece
+  end
+
+  def move(start_pos, end_pos)
+    raise "There is no piece on that square." if occupant(start_pos).nil?
+    current_piece = self[start_pos]
+    raise "Not a valid move!" unless current_piece.moves.include?(end_pos)
+    p current_piece.position
+    self[end_pos] = current_piece
+    self[start_pos] = nil
   end
 
   def display
-    system("clear")
+    # system("clear")
     puts
     @rows.each_with_index do |row, index|
       print " #{8 - index} "
       row.each do |tile|
-        print tile.nil?  ? "   " : " #{tile.get_sprite}"
+        print tile.nil?  ? " \u258b" : " #{tile.get_sprite}"
       end
       puts
     end
     print "   "
     ('A'..'H').each { |letter| print " #{letter}"}
     nil
+  end
+
+  def dup
+    dup_board = Board.new
+    @rows.each_with_index do |row, idx1|
+      row.each_with_index do |tile, idx2|
+        dup_board[[idx1, idx2]] = tile.piece_dup(dup_board) unless tile.nil?
+      end
+    end
+    dup_board
   end
 end

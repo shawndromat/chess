@@ -1,10 +1,12 @@
 require './piece.rb'
 
+
 class Pawn < Piece
+  attr_reader :direction
 
   def initialize(position, board, color)
     super(position, board, color)
-    @direction = (@color == :black ? -1 : 1)
+    @direction = (@color == :black ? 1 : -1)
     @strike_deltas = [
       [@direction * 1, -1],
       [@direction * 1, 1]
@@ -29,7 +31,7 @@ class Pawn < Piece
       end
     end
 
-    list_of_moves
+    list_of_moves.select { |move| !move_into_check?(move)}
   end
 
   def first_move?
