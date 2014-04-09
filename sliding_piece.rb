@@ -34,15 +34,15 @@ class SlidingPiece < Piece
     [].tap do |all_moves|
       if move_dirs.include?(:diagonal)
         expand_moves(DIAG_DELTAS).each do
-          |x| all_moves << x # unless move_into_check?(x)
+          |x| all_moves << x
         end
       end
       if move_dirs.include?(:horizontal)
         expand_moves(HORIZ_DELTAS).each do
-          |x| all_moves << x # unless move_into_check?(x)
+          |x| all_moves << x
         end
       end
-    end.select { |move| !move_into_check?(move)}
+    end
   end
 end
 

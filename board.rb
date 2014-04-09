@@ -3,9 +3,9 @@ Dir["./*.rb"].each {|file| require file }
 class Board
   attr_reader :rows
 
-  def initialize
+  def initialize(start_board = true)
     @rows  = Array.new(8) { Array.new(8) }
-    set_pieces
+    set_pieces if start_board
   end
 
   def set_pieces
@@ -73,11 +73,36 @@ class Board
     @rows[x][y] = piece
   end
 
+  def checkmate?(color)
+    no_valid_moves?(color) && in_check?(color)
+  end
+
+  def no_valid_moves?(color)
+    @rows.each do |row|
+      row.each do |tile|
+        next if tile.nil?
+        return false if tile.color == color && tile.valid_moves.length > 0
+      end
+    end
+    true
+  end
+
   def move(start_pos, end_pos)
     raise "There is no piece on that square." if occupant(start_pos).nil?
     current_piece = self[start_pos]
-    raise "Not a valid move!" unless current_piece.moves.include?(end_pos)
+    raise "Not a valid move!" unless current_piece.valid_moves.include?(end_pos)
     p current_piece.position
+    current_piece.position = end_pos
+    self[end_pos] = current_piece
+    self[start_pos] = nil
+  end
+
+  def test_move(start_pos, end_pos)
+    raise "There is no piece on that square." if occupant(start_pos).nil?
+    current_piece = self[start_pos]
+    raise "Not a valid move!" unless current_piece.moves.include?(end_pos)
+    # p current_piece.position
+    current_piece.position = end_pos
     self[end_pos] = current_piece
     self[start_pos] = nil
   end
@@ -98,7 +123,7 @@ class Board
   end
 
   def dup
-    dup_board = Board.new
+    dup_board = Board.new(false)
     @rows.each_with_index do |row, idx1|
       row.each_with_index do |tile, idx2|
         dup_board[[idx1, idx2]] = tile.piece_dup(dup_board) unless tile.nil?

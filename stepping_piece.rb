@@ -10,7 +10,7 @@ class SteppingPiece < Piece
           list_of_moves << [x, y]
         end
       end
-    end.select { |move| !move_into_check?(move)}
+    end
   end
 end
 

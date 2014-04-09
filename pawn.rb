@@ -31,7 +31,7 @@ class Pawn < Piece
       end
     end
 
-    list_of_moves.select { |move| !move_into_check?(move)}
+    list_of_moves
   end
 
   def first_move?
