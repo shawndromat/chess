@@ -110,17 +110,19 @@ class Board
     self[start_pos] = nil
   end
 
-  def display
+  def display(cursor_pos = nil)
     system("clear")
     puts
     counter = 0
-    @rows.each_with_index do |row, index|
-      print " #{8 - index} "
-      row.each do |tile|
+    @rows.each_with_index do |row, row_idx|
+      print " #{8 - row_idx} "
+      row.each_with_index do |tile, col_idx|
         counter += 1
         sprite = tile.nil?  ? "  " : "#{tile.get_sprite}"
-        print sprite.on_cyan if counter.odd?
-        print sprite.on_yellow if counter.even?
+        sprite = sprite.on_cyan if counter.odd?
+        sprite = sprite.on_yellow if counter.even?
+        sprite = sprite.on_red.blink if [row_idx, col_idx] == cursor_pos
+        print sprite
       end
       counter += 1
       puts

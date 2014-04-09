@@ -1,13 +1,17 @@
 require './board.rb'
 require 'yaml'
 require 'colorize'
+require 'io/console'
 
 
 class Chess
   attr_reader :player1, :player2
-  attr_accessor :board, :current_player, :opposite_player
+  attr_accessor :board, :current_player, :opposite_player, :cursor,
+  :cursor_start_position, :cursor_end_position
 
   def initialize
+    @cursor_start_position = nil
+    @cursor_end_position = nil
   end
 
   def welcome_sequence
@@ -30,7 +34,7 @@ class Chess
     else
       welcome_sequence
     end
-    #if new, choose player types
+
   end
 
   def set_players
@@ -47,11 +51,11 @@ class Chess
 
     @current_player ||= @player1
     @opposite_player ||= @player2
-
+    @cursor = [7,0]
     until over?(@current_player)
-      @board.display
+      @board.display(@cursor)
       puts "#{@current_player.name}'s turn."
-      make_move(@current_player)
+      get_move
       @current_player, @opposite_player = @opposite_player, @current_player
     end
 
@@ -69,70 +73,53 @@ class Chess
     @board.checkmate?(player.color) || @board.stalemate?(player.color)
   end
 
-  def parse_input(player)
-    puts "Enter 'save' at any time to save game."
-    puts "Enter move:"
-    user_input = gets.chomp
-    raise SavingError.new "Saving game" if user_input.downcase == "save"
-    user_input = user_input.split(",").map(&:strip)
-    if user_input.length != 2
-      raise RuntimeError.new "Not a valid move! Must have 2 tiles selected."
-    end
-    user_input
+  def get_cursor_input
+    key = $stdin.getch.downcase
+    return :up if key == 'w'
+    return :down if key == 's'
+    return :left if key == 'a'
+    return :right if key == 'd'
+    return :space if key == ' '
+    save_game if key == 'p'
+    exit if key == '0'
   end
 
-  def get_turn(player)
-    begin
-      start_pos, end_pos = parse_input(player)
-    rescue RuntimeError => e
-      puts e.message
-      retry
-    end
+  def get_move
 
-    move = [translate_input(start_pos.split("")), translate_input(end_pos.split(""))]
-
-    if @board[move[0]].nil?
-      raise RuntimeError.new "There's no piece on that tile."
+    while true
+      x, y = @cursor
+      @board.display(@cursor)
+      key = get_cursor_input
+      if key == :up
+        @cursor = [x - 1, y] unless x == 0
+      elsif key == :down
+        @cursor = [x + 1, y] unless x == 7
+      elsif key == :left
+        @cursor = [x, y - 1] unless y == 0
+      elsif key == :right
+        @cursor = [x, y + 1] unless y == 7
+      elsif key == :space
+        if @cursor_start_position.nil?
+          @cursor_start_position = [x, y]
+        else
+          @cursor_end_position = [x, y]
+          make_move
+          @cursor_start_position = nil
+          @cursor_end_position = nil
+          break
+        end
+      end
     end
-    if @board[move[0]].color != player.color
+  end
+
+  def make_move
+    if @board[@cursor_start_position].color != @current_player.color
       raise RuntimeError.new "That piece isn't yours!"
     end
-    move
-  end
-
-  def make_move(player)
-    begin
-      start_pos, end_pos = get_turn(player)
-      @board.move(start_pos, end_pos)
-    rescue SavingError
-      save_game
-      puts "Thanks for playing!"
-      sleep(1)
-      exit
-    rescue RuntimeError => e
-      puts e.message
-      retry
+    if @board[@cursor_start_position].nil?
+      raise RuntimeError.new "There's no piece on that tile."
     end
-  end
-
-  def translate_input(pos)
-    letters = {
-      a: 0,
-      b: 1,
-      c: 2,
-      d: 3,
-      e: 4,
-      f: 5,
-      g: 6,
-      h: 7
-    }
-    letter, number = pos
-
-    unless ('1'..'8').cover?(number) and ('a'..'h').cover?(letter)
-      raise RuntimeError.new "Please enter your move in this format: f3, f4"
-    end
-
-    [ (8 - number.to_i), letters[ letter.downcase.to_sym ] ]
+    @board.move(@cursor_start_position, @cursor_end_position)
   end
 
   def save_game
