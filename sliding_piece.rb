@@ -1,5 +1,5 @@
 require './piece.rb'
-
+require 'colorize'
 
 class SlidingPiece < Piece
 
@@ -52,7 +52,7 @@ class Bishop < SlidingPiece
   end
 
   def get_sprite
-    @color == :black ? "\u265D" : "\u2657"
+    @color == :black ? "\u265D ".black : "\u265D ".white
   end
 end
 
@@ -62,7 +62,7 @@ class Rook < SlidingPiece
   end
 
   def get_sprite
-    @color == :black ? "\u265C" : "\u2656"
+    @color == :black ? "\u265C ".black : "\u265C ".white
   end
 end
 
@@ -72,6 +72,6 @@ class Queen < SlidingPiece
   end
 
   def get_sprite
-    @color == :black ? "\u265B" : "\u2655"
+    @color == :black ? "\u265B ".black : "\u265B ".white
   end
 end

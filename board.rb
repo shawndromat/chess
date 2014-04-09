@@ -1,4 +1,5 @@
 Dir["./*.rb"].each {|file| require file }
+require 'colorize'
 
 class Board
   attr_reader :rows
@@ -112,15 +113,20 @@ class Board
   def display
     system("clear")
     puts
+    counter = 0
     @rows.each_with_index do |row, index|
       print " #{8 - index} "
       row.each do |tile|
-        print tile.nil?  ? " \u258b" : " #{tile.get_sprite}"
+        counter += 1
+        sprite = tile.nil?  ? "  " : "#{tile.get_sprite}"
+        print sprite.on_cyan if counter.odd?
+        print sprite.on_yellow if counter.even?
       end
+      counter += 1
       puts
     end
     print "   "
-    ('A'..'H').each { |letter| print " #{letter}"}
+    ('A'..'H').each { |letter| print "#{letter} "}
     puts
     nil
   end

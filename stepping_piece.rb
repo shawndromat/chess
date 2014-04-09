@@ -1,4 +1,5 @@
 require './piece.rb'
+require 'colorize'
 
 class SteppingPiece < Piece
 
@@ -28,7 +29,7 @@ class Knight < SteppingPiece
   ]
 
   def get_sprite
-    @color == :black ? "\u265e" : "\u2658"
+    @color == :black ? "\u265e ".black : "\u265e ".white
   end
 
 end
@@ -46,6 +47,6 @@ class King < SteppingPiece
   ]
 
   def get_sprite
-    @color == :black ? "\u265A" : "\u2654"
+    @color == :black ? "\u265A ".black : "\u265A ".white
   end
 end

@@ -1,5 +1,6 @@
 require 'debugger'
 require './board.rb'
+require 'colorize'
 
 class Piece
   attr_reader :color, :board

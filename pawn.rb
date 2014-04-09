@@ -1,4 +1,5 @@
 require './piece.rb'
+require 'colorize'
 
 
 class Pawn < Piece
@@ -44,7 +45,7 @@ class Pawn < Piece
   end
 
   def get_sprite
-    @color == :black ? "\u265f" : "\u2659"
+    @color == :black ? "\u265f ".black : "\u265f ".white
   end
 
 
