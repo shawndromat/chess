@@ -22,18 +22,32 @@ class Chess
 
   def play
     welcome_sequence
+
     current_player = @player1
     opposite_player = @player2
-    until over?
+
+    until over?(current_player)
       @board.display
-      get_turn(current_player)
-
+      puts "#{current_player.name}'s turn."
+      make_move(current_player)
       current_player, opposite_player = opposite_player, current_player
+    end
 
+    @board.display
+
+    if @board.checkmate?(current_player.color)
+      puts "#{current_player.name} was checkmated by #{opposite_player.name}."
+      puts "#{current_player.name} loses."
+    else
+      puts "Stalemate!"
     end
   end
 
-  def parse_get_turn_input(player)
+  def over?(player)
+    @board.checkmate?(player.color) || @board.stalemate?(player.color)
+  end
+
+  def parse_input(player)
     puts "Enter turn:"
     user_input = gets.chomp.split(", ")
     if user_input.length != 2
@@ -44,7 +58,7 @@ class Chess
 
   def get_turn(player)
     begin
-      start_pos, end_pos = parse_get_turn_input(player)
+      start_pos, end_pos = parse_input(player)
     rescue RuntimeError => e
       puts e.message
       retry
@@ -83,24 +97,23 @@ class Chess
       h: 7
     }
     letter, number = pos
-    [ (8 - number.to_i), letters[ letter.to_sym ] ]
+
+    unless ('1'..'8').cover?(number) and ('a'..'h').cover?(letter)
+      raise RuntimeError.new "Please enter your move in this format: f3, f4"
+    end
+
+    [ (8 - number.to_i), letters[ letter.downcase.to_sym ] ]
   end
 
-  #if saved, go straight to game loop
-
-  #loop
-  #display
-  #get the players move // #save game
-  #move
-  #check for check and checkmate
 end
 
 class Player
 
-  attr_reader :color
+  attr_reader :color, :name
 
-  def initialize(color)
+  def initialize(color, name = nil)
     @color = color
+    @name ||= (color == :white ? "Player 1" : "Player 2")
   end
 
 end
@@ -114,7 +127,6 @@ class ComputerPlayer < Player
 end
 
 if __FILE__ == $PROGRAM_NAME
-  puts "chess"
   g = Chess.new
   g.play
 

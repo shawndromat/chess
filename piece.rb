@@ -11,10 +11,6 @@ class Piece
     @color = color
   end
 
-  def moves
-    raise NotImplementedError
-  end
-
   def opponent?(pos)
     return false if @board.rows[pos[0]][pos[1]].nil?
     @color != @board.rows[pos[0]][pos[1]].color

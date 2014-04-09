@@ -77,6 +77,10 @@ class Board
     no_valid_moves?(color) && in_check?(color)
   end
 
+  def stalemate?(color)
+    no_valid_moves?(color) && !in_check?(color)
+  end
+
   def no_valid_moves?(color)
     @rows.each do |row|
       row.each do |tile|
@@ -106,7 +110,7 @@ class Board
   end
 
   def display
-    # system("clear")
+    system("clear")
     puts
     @rows.each_with_index do |row, index|
       print " #{8 - index} "
@@ -117,6 +121,7 @@ class Board
     end
     print "   "
     ('A'..'H').each { |letter| print " #{letter}"}
+    puts
     nil
   end
 
