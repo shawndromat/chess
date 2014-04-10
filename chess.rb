@@ -54,8 +54,6 @@ class Chess
     @cursor = [7,0]
 
     until over?(@current_player)
-      # @board.display(@cursor)
-#       puts "#{@current_player.name}'s turn."
       get_move
       @current_player, @opposite_player = @opposite_player, @current_player
     end
