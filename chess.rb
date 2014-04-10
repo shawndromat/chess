@@ -85,11 +85,19 @@ class Chess
   end
 
   def get_move
+    error_message = ""
+    begin
 
     while true
       x, y = @cursor
-      @board.display(@cursor)
+
+      @board.display(@cursor, @cursor_start_position)
+      puts "#{@current_player.name}'s turn."
+      puts error_message
+      puts "You're in check" if @board.in_check?(@current_player.color)
+
       key = get_cursor_input
+      error_message = ""
       if key == :up
         @cursor = [x - 1, y] unless x == 0
       elsif key == :down
@@ -100,7 +108,7 @@ class Chess
         @cursor = [x, y + 1] unless y == 7
       elsif key == :space
         if @cursor_start_position.nil?
-          @cursor_start_position = [x, y]
+          @cursor_start_position = [x, y] if @board[@cursor] != nil
         else
           @cursor_end_position = [x, y]
           make_move
@@ -110,6 +118,14 @@ class Chess
         end
       end
     end
+
+    rescue RuntimeError => e
+      @cursor_start_position = nil
+      @cursor_end_position = nil
+      error_message = e.message
+      retry
+    end
+
   end
 
   def make_move
@@ -128,6 +144,7 @@ class Chess
     File.open("saved_games/#{filename}.yml", 'w') do |f|
       f.puts self.to_yaml
     end
+    exit
   end
 end
 

@@ -98,19 +98,19 @@ class Board
     p current_piece.position
     current_piece.position = end_pos
     self[end_pos] = current_piece
+    pawn_promotion(end_pos)
     self[start_pos] = nil
   end
 
   def test_move(start_pos, end_pos)
     current_piece = self[start_pos]
     raise "Not a valid move!" unless current_piece.moves.include?(end_pos)
-    # p current_piece.position
     current_piece.position = end_pos
     self[end_pos] = current_piece
     self[start_pos] = nil
   end
 
-  def display(cursor_pos = nil)
+  def display(cursor_pos = nil, cursor_start = nil)
     system("clear")
     puts
     counter = 0
@@ -121,6 +121,7 @@ class Board
         sprite = tile.nil?  ? "  " : "#{tile.get_sprite}"
         sprite = sprite.on_cyan if counter.odd?
         sprite = sprite.on_yellow if counter.even?
+        sprite = sprite.on_magenta.blink if [row_idx, col_idx] == cursor_start
         sprite = sprite.on_red.blink if [row_idx, col_idx] == cursor_pos
         print sprite
       end
@@ -141,5 +142,14 @@ class Board
       end
     end
     dup_board
+  end
+
+  def pawn_promotion(pos)
+    return unless self[pos].class == Pawn
+    if self[pos].position[0] == 0 && self[pos].color == :white
+      self[pos] = Queen.new(pos, self, :white)
+    elsif self[pos].position[7] == 0 && self[pos].color == :black
+      self[pos] = Queen.new(pos, self, :black)
+    end
   end
 end

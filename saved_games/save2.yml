@@ -1,0 +1,329 @@
+--- !ruby/object:Chess
+cursor_start_position: 
+cursor_end_position: 
+board: &70329163152500 !ruby/object:Board
+  rows:
+  - - !ruby/object:Rook
+      position:
+      - 0
+      - 0
+      board: *70329163152500
+      color: :black
+    - !ruby/object:Knight
+      position:
+      - 0
+      - 1
+      board: *70329163152500
+      color: :black
+    - 
+    - 
+    - !ruby/object:King
+      position:
+      - 0
+      - 4
+      board: *70329163152500
+      color: :black
+    - !ruby/object:Bishop
+      position:
+      - 0
+      - 5
+      board: *70329163152500
+      color: :black
+    - !ruby/object:Knight
+      position:
+      - 0
+      - 6
+      board: *70329163152500
+      color: :black
+    - !ruby/object:Rook
+      position:
+      - 0
+      - 7
+      board: *70329163152500
+      color: :black
+  - - !ruby/object:Pawn
+      position:
+      - 1
+      - 0
+      board: *70329163152500
+      color: :black
+      direction: 1
+      strike_deltas:
+      - - 1
+        - -1
+      - - 1
+        - 1
+    - !ruby/object:Pawn
+      position:
+      - 1
+      - 1
+      board: *70329163152500
+      color: :black
+      direction: 1
+      strike_deltas:
+      - - 1
+        - -1
+      - - 1
+        - 1
+    - !ruby/object:Pawn
+      position:
+      - 1
+      - 2
+      board: *70329163152500
+      color: :black
+      direction: 1
+      strike_deltas:
+      - - 1
+        - -1
+      - - 1
+        - 1
+    - 
+    - !ruby/object:Pawn
+      position:
+      - 1
+      - 4
+      board: *70329163152500
+      color: :black
+      direction: 1
+      strike_deltas:
+      - - 1
+        - -1
+      - - 1
+        - 1
+    - !ruby/object:Pawn
+      position:
+      - 1
+      - 5
+      board: *70329163152500
+      color: :black
+      direction: 1
+      strike_deltas:
+      - - 1
+        - -1
+      - - 1
+        - 1
+    - !ruby/object:Pawn
+      position:
+      - 1
+      - 6
+      board: *70329163152500
+      color: :black
+      direction: 1
+      strike_deltas:
+      - - 1
+        - -1
+      - - 1
+        - 1
+    - !ruby/object:Pawn
+      position:
+      - 1
+      - 7
+      board: *70329163152500
+      color: :black
+      direction: 1
+      strike_deltas:
+      - - 1
+        - -1
+      - - 1
+        - 1
+  - - 
+    - 
+    - 
+    - !ruby/object:Queen
+      position:
+      - 2
+      - 3
+      board: *70329163152500
+      color: :black
+    - 
+    - 
+    - 
+    - 
+  - - 
+    - 
+    - 
+    - !ruby/object:Pawn
+      position:
+      - 3
+      - 3
+      board: *70329163152500
+      color: :black
+      direction: 1
+      strike_deltas:
+      - - 1
+        - -1
+      - - 1
+        - 1
+    - 
+    - 
+    - 
+    - 
+  - - !ruby/object:Pawn
+      position:
+      - 4
+      - 0
+      board: *70329163152500
+      color: :white
+      direction: -1
+      strike_deltas:
+      - - -1
+        - -1
+      - - -1
+        - 1
+    - 
+    - 
+    - 
+    - 
+    - 
+    - 
+    - 
+  - - !ruby/object:Knight
+      position:
+      - 5
+      - 0
+      board: *70329163152500
+      color: :white
+    - 
+    - !ruby/object:Pawn
+      position:
+      - 5
+      - 2
+      board: *70329163152500
+      color: :white
+      direction: -1
+      strike_deltas:
+      - - -1
+        - -1
+      - - -1
+        - 1
+    - 
+    - 
+    - 
+    - 
+    - !ruby/object:Pawn
+      position:
+      - 5
+      - 7
+      board: *70329163152500
+      color: :white
+      direction: -1
+      strike_deltas:
+      - - -1
+        - -1
+      - - -1
+        - 1
+  - - 
+    - !ruby/object:Pawn
+      position:
+      - 6
+      - 1
+      board: *70329163152500
+      color: :white
+      direction: -1
+      strike_deltas:
+      - - -1
+        - -1
+      - - -1
+        - 1
+    - 
+    - !ruby/object:Pawn
+      position:
+      - 6
+      - 3
+      board: *70329163152500
+      color: :white
+      direction: -1
+      strike_deltas:
+      - - -1
+        - -1
+      - - -1
+        - 1
+    - !ruby/object:Pawn
+      position:
+      - 6
+      - 4
+      board: *70329163152500
+      color: :white
+      direction: -1
+      strike_deltas:
+      - - -1
+        - -1
+      - - -1
+        - 1
+    - !ruby/object:Pawn
+      position:
+      - 6
+      - 5
+      board: *70329163152500
+      color: :white
+      direction: -1
+      strike_deltas:
+      - - -1
+        - -1
+      - - -1
+        - 1
+    - 
+    - !ruby/object:Pawn
+      position:
+      - 6
+      - 7
+      board: *70329163152500
+      color: :white
+      direction: -1
+      strike_deltas:
+      - - -1
+        - -1
+      - - -1
+        - 1
+  - - !ruby/object:Rook
+      position:
+      - 7
+      - 0
+      board: *70329163152500
+      color: :white
+    - 
+    - !ruby/object:Bishop
+      position:
+      - 7
+      - 2
+      board: *70329163152500
+      color: :white
+    - !ruby/object:Queen
+      position:
+      - 7
+      - 3
+      board: *70329163152500
+      color: :white
+    - !ruby/object:King
+      position:
+      - 7
+      - 4
+      board: *70329163152500
+      color: :white
+    - !ruby/object:Bishop
+      position:
+      - 7
+      - 5
+      board: *70329163152500
+      color: :white
+    - !ruby/object:Knight
+      position:
+      - 7
+      - 6
+      board: *70329163152500
+      color: :white
+    - !ruby/object:Rook
+      position:
+      - 7
+      - 7
+      board: *70329163152500
+      color: :white
+current_player: !ruby/object:HumanPlayer
+  color: :black
+  name: Sam
+opposite_player: !ruby/object:HumanPlayer
+  color: :white
+  name: Shawna
+cursor:
+- 7
+- 0
