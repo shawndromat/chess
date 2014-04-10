@@ -40,4 +40,8 @@ class Piece
     moves.select { |move| !move_into_check?(move)}
   end
 
+  def get_sprite
+    @color == :black ? self.class::SPRITE.black : self.class::SPRITE.white
+  end
+
 end

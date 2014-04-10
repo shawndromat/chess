@@ -51,9 +51,7 @@ class Bishop < SlidingPiece
     [:diagonal]
   end
 
-  def get_sprite
-    @color == :black ? "\u265D ".black : "\u265D ".white
-  end
+  SPRITE = "\u265D "
 end
 
 class Rook < SlidingPiece
@@ -61,9 +59,7 @@ class Rook < SlidingPiece
     [:horizontal]
   end
 
-  def get_sprite
-    @color == :black ? "\u265C ".black : "\u265C ".white
-  end
+  SPRITE = "\u265C "
 end
 
 class Queen < SlidingPiece
@@ -71,7 +67,5 @@ class Queen < SlidingPiece
     [:diagonal, :horizontal]
   end
 
-  def get_sprite
-    @color == :black ? "\u265B ".black : "\u265B ".white
-  end
+  SPRITE = "\u265B "
 end

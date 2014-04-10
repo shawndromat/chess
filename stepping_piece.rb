@@ -28,13 +28,11 @@ class Knight < SteppingPiece
     [-2, 1]
   ]
 
-  def get_sprite
-    @color == :black ? "\u265e ".black : "\u265e ".white
-  end
-
+  SPRITE = "\u265e "
 end
 
 class King < SteppingPiece
+
   DELTAS = [
     [-1, -1],
     [-1, 0],
@@ -46,7 +44,5 @@ class King < SteppingPiece
     [1, 1]
   ]
 
-  def get_sprite
-    @color == :black ? "\u265A ".black : "\u265A ".white
-  end
+  SPRITE = "\u265A "
 end

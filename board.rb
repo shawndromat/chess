@@ -10,14 +10,7 @@ class Board
   end
 
   def set_pieces
-    @rows[0][0] = Rook.new([0,0], self, :black)
-    @rows[0][1] = Knight.new([0,1], self, :black)
-    @rows[0][2] = Bishop.new([0,2], self, :black)
-    @rows[0][3] = Queen.new([0,3], self, :black)
-    @rows[0][4] = King.new([0,4], self, :black)
-    @rows[0][5] = Bishop.new([0,5], self, :black)
-    @rows[0][6] = Knight.new([0,6], self, :black)
-    @rows[0][7] = Rook.new([0,7], self, :black)
+    place_big_pieces(0, :black)
     (0..7).each do |index|
       @rows[1][index] = Pawn.new([1, index], self, :black)
     end
@@ -25,14 +18,18 @@ class Board
     (0..7).each do |index|
       @rows[6][index] = Pawn.new([6, index], self, :white)
     end
-    @rows[7][0] = Rook.new([7,0], self, :white)
-    @rows[7][1] = Knight.new([7,1], self, :white)
-    @rows[7][2] = Bishop.new([7,2], self, :white)
-    @rows[7][3] = Queen.new([7,3], self, :white)
-    @rows[7][4] = King.new([7,4], self, :white)
-    @rows[7][5] = Bishop.new([7,5], self, :white)
-    @rows[7][6] = Knight.new([7,6], self, :white)
-    @rows[7][7] = Rook.new([7,7], self, :white)
+    place_big_pieces(7, :white)
+  end
+
+  def place_big_pieces(row, color)
+    @rows[row][0] = Rook.new([row,0], self, color)
+    @rows[row][1] = Knight.new([row,1], self, color)
+    @rows[row][2] = Bishop.new([row,2], self, color)
+    @rows[row][3] = Queen.new([row,3], self, color)
+    @rows[row][4] = King.new([row,4], self, color)
+    @rows[row][5] = Bishop.new([row,5], self, color)
+    @rows[row][6] = Knight.new([row,6], self, color)
+    @rows[row][7] = Rook.new([row,7], self, color)
   end
 
   def occupant(pos)
@@ -95,19 +92,21 @@ class Board
   def move(start_pos, end_pos)
     current_piece = self[start_pos]
     raise "Not a valid move!" unless current_piece.valid_moves.include?(end_pos)
-    p current_piece.position
-    current_piece.position = end_pos
-    self[end_pos] = current_piece
-    pawn_promotion(end_pos)
-    self[start_pos] = nil
+    place_piece_FO_REAL(start_pos, end_pos)
   end
 
   def test_move(start_pos, end_pos)
     current_piece = self[start_pos]
     raise "Not a valid move!" unless current_piece.moves.include?(end_pos)
+    place_piece_FO_REAL(start_pos, end_pos)
+  end
+
+  def place_piece_FO_REAL(start_pos, end_pos)
+    current_piece = self[start_pos]
     current_piece.position = end_pos
     self[end_pos] = current_piece
     self[start_pos] = nil
+    pawn_promotion(end_pos)
   end
 
   def display(cursor_pos = nil, cursor_start = nil)

@@ -5,6 +5,8 @@ require 'colorize'
 class Pawn < Piece
   attr_reader :direction
 
+  SPRITE = "\u265f "
+
   def initialize(position, board, color)
     super(position, board, color)
     @direction = (@color == :black ? 1 : -1)
@@ -43,10 +45,4 @@ class Pawn < Piece
     end
     false
   end
-
-  def get_sprite
-    @color == :black ? "\u265f ".black : "\u265f ".white
-  end
-
-
 end
