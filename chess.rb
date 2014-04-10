@@ -10,8 +10,8 @@ class Chess
   :cursor_start_position, :cursor_end_position
 
   def initialize
-    @cursor_start_position = nil
-    @cursor_end_position = nil
+    @start_pos = nil
+    @end_pos = nil
   end
 
   def welcome_sequence
@@ -40,10 +40,10 @@ class Chess
   def set_players
     puts "Enter first player's name:"
     name = gets.chomp
-    @player1 = HumanPlayer.new(:white, name)
+    @player1 = Player.new(:white, name)
     puts "Enter second player's name:"
     name = gets.chomp
-    @player2 = HumanPlayer.new(:black, name)
+    @player2 = Player.new(:black, name)
   end
 
   def play
@@ -54,7 +54,7 @@ class Chess
     @cursor = [7,0]
 
     until over?(@current_player)
-      get_move
+      player_move
       @current_player, @opposite_player = @opposite_player, @current_player
     end
 
@@ -72,69 +72,78 @@ class Chess
     @board.checkmate?(player.color) || @board.stalemate?(player.color)
   end
 
-  def get_cursor_input
-    key = $stdin.getch.downcase
-    return :up if key == 'w'
-    return :down if key == 's'
-    return :left if key == 'a'
-    return :right if key == 'd'
-    return :space if key == ' '
-    save_game if key == 'p'
-    exit if key == '0'
+  def player_move
+    error_message = ""
+    begin
+      @start_pos = nil
+      @end_pos = nil
+      while @end_pos == nil
+        @board.display(@cursor, @start_pos)
+        puts "#{@current_player.name}'s turn."
+        puts error_message
+        puts "You're in check" if @board.in_check?(@current_player.color)
+        unless @start_pos.nil?
+          puts @board[@start_pos]
+        end
+        get_move
+      end
+      @board.move(@start_pos, @end_pos)
+    rescue InvalidMoveError => e
+      puts "errored out"
+      puts e.message
+      retry
+    end
   end
 
   def get_move
-    error_message = ""
     begin
+      move = $stdin.getch.downcase
 
-    while true
-      x, y = @cursor
-
-      @board.display(@cursor, @cursor_start_position)
-      puts "#{@current_player.name}'s turn."
-      puts error_message
-      puts "You're in check" if @board.in_check?(@current_player.color)
-
-      key = get_cursor_input
-      error_message = ""
-      if key == :up
-        @cursor = [x - 1, y] unless x == 0
-      elsif key == :down
-        @cursor = [x + 1, y] unless x == 7
-      elsif key == :left
-        @cursor = [x, y - 1] unless y == 0
-      elsif key == :right
-        @cursor = [x, y + 1] unless y == 7
-      elsif key == :space
-        if @cursor_start_position.nil?
-          @cursor_start_position = [x, y] if @board[@cursor] != nil
+      first, last = @cursor
+      case move
+        when 'w'
+          @cursor = [first - 1, last] unless first == 0
+        when 's'
+          @cursor = [first + 1, last] unless first == 7
+        when 'a'
+          @cursor = [first, last - 1] unless last == 0
+        when 'd'
+          @cursor = [first, last + 1] unless last == 7
+        when 'n'
+          save_game
+        when 'q'
+          exit
+        when ' '
+          select_piece
         else
-          @cursor_end_position = [x, y]
-          make_move
-          @cursor_start_position = nil
-          @cursor_end_position = nil
-          break
+          raise WrongKeyError.new
         end
-      end
-    end
-
-    rescue RuntimeError => e
-      @cursor_start_position = nil
-      @cursor_end_position = nil
-      error_message = e.message
+    rescue WrongKeyError
+      puts "Use 'w', 'a', 's' and 'd' to move"
+      retry
+    rescue InvalidEntryError => e
+      puts e.message
+      retry
+    rescue StandardError => e
+      puts e.message
       retry
     end
-
   end
 
-  def make_move
-    if @board[@cursor_start_position].color != @current_player.color
-      raise RuntimeError.new "That piece isn't yours!"
+  def select_piece
+    #if no start position yet, make selected piece start position
+    if @start_pos.nil?
+      if @board[@cursor].nil?
+        raise InvalidEntryError.new "There's no piece there."
+      end
+      if @board[@cursor].color != @current_player.color
+        raise InvalidEntryError.new "That is not your piece"
+      end
+      @start_pos = @cursor
+    else
+      #already a start position so set end position
+      @end_pos = @cursor
     end
-    if @board[@cursor_start_position].nil?
-      raise RuntimeError.new "There's no piece on that tile."
-    end
-    @board.move(@cursor_start_position, @cursor_end_position)
   end
 
   def save_game
@@ -158,15 +167,16 @@ class Player
 
 end
 
-class HumanPlayer < Player
-
-end
-
-class ComputerPlayer < Player
-
-end
-
 class SavingError < StandardError
+end
+
+class WrongKeyError < StandardError
+end
+
+class InvalidMoveError < StandardError
+end
+
+class InvalidEntryError < StandardError
 end
 
 if __FILE__ == $PROGRAM_NAME

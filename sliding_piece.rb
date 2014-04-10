@@ -17,19 +17,6 @@ class SlidingPiece < Piece
     [1, 0]
   ]
 
-  def expand_moves(deltas)
-    [].tap do |possible_moves|
-      deltas.each do |delta|
-        pos = [@position[0] + delta[0], @position[1] + delta[1]]
-        while on_board?(pos) && (@board.occupant(pos) != @color)
-          possible_moves << pos
-          break if opponent?(pos)
-          pos = [pos[0] + delta[0], pos[1] + delta[1]]
-        end
-      end
-    end
-  end
-
   def moves
     [].tap do |all_moves|
       if move_dirs.include?(:diagonal)
@@ -40,6 +27,20 @@ class SlidingPiece < Piece
       if move_dirs.include?(:horizontal)
         expand_moves(HORIZ_DELTAS).each do
           |x| all_moves << x
+        end
+      end
+    end
+  end
+
+  private
+  def expand_moves(deltas)
+    [].tap do |possible_moves|
+      deltas.each do |delta|
+        pos = [@position[0] + delta[0], @position[1] + delta[1]]
+        while on_board?(pos) && (@board.occupant(pos) != @color)
+          possible_moves << pos
+          break if opponent?(pos)
+          pos = [pos[0] + delta[0], pos[1] + delta[1]]
         end
       end
     end

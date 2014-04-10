@@ -9,25 +9,20 @@ class Pawn < Piece
 
   def initialize(position, board, color)
     super(position, board, color)
-    @direction = (@color == :black ? 1 : -1)
-    @strike_deltas = [
-      [@direction * 1, -1],
-      [@direction * 1, 1]
-    ]
   end
 
   def moves
     list_of_moves = []
 
     if first_move?
-      two_forward = [@position[0] + (@direction * 2), @position[1]]
+      two_forward = [@position[0] + (direction * 2), @position[1]]
       list_of_moves << two_forward if @board.occupant(two_forward) == nil
     end
 
-    one_forward = [@position[0] + (@direction * 1), @position[1]]
+    one_forward = [@position[0] + (direction * 1), @position[1]]
     list_of_moves << one_forward if @board.occupant(one_forward) == nil
 
-    @strike_deltas.each do |delta|
+    strike_deltas.each do |delta|
       x, y = @position[0] + delta[0], @position[1] + delta[1]
       if on_board?([x, y]) && opponent?([x, y])
         list_of_moves << [x, y]
@@ -37,12 +32,16 @@ class Pawn < Piece
     list_of_moves
   end
 
+  private
   def first_move?
-    if @position[0] == 1 && @color == :black
-      return true
-    elsif @position[0] == 6 && @color == :white
-      return true
-    end
-    false
+    position[0] == (@color == :white ? 6 : 1)
+  end
+
+  def direction
+    @color == :black ? 1 : -1
+  end
+
+  def strike_deltas
+    [ [direction * 1, -1], [direction * 1, 1] ]
   end
 end
