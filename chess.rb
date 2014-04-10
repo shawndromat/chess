@@ -82,9 +82,7 @@ class Chess
         puts "#{@current_player.name}'s turn."
         puts error_message
         puts "You're in check" if @board.in_check?(@current_player.color)
-        unless @start_pos.nil?
-          puts @board[@start_pos]
-        end
+
         get_move
       end
       @board.move(@start_pos, @end_pos)
